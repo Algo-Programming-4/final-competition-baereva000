@@ -1,29 +1,48 @@
 import random
-from typing import List, Tuple
-from player import Player
+from linkedList import Linked_list
+from player import get_farms
+# Farmer Jopliphant can't keep all his farm plots together! He needs a linked list that he can store the plot number and what is planted there! 
+# After each year, each plant has to swap with the next plant on a list to ensure right dirt mineral concentration. 
+# Find what he will plant in each field after any set amount of years.
 
+# Farmer Jopliphant knows this isn't the best method for this problem. He just has some problems. We will not address this further.
 
-def olisort_challenge() -> Tuple[bool, str, str]:
-    """
-    Challenge: sort a list of random integers.
+#Order of crop rotation
+#tomato -> carrot -> wheat -> potato -> empty -> tomato
 
-    Steps:
-      1. Generate a random list of 10 ints between 0 and 100.
-      2. Call Player.olisort to get the player's sorted list.
-      3. Compute the expected sorted list using Python's sorted().
-      4. Compare and return (passed, expected_str, actual_str).
-    """
-    # 1) generate input
-    data: List[int] = [random.randint(0, 100) for _ in range(10)]
+def evan_challenge():
+    #dictionary relating numbers to crops
+    cropDict = {1: "tomato", 2: "carrot", 3: "wheat", 4: "potato", 5: "Empty"}
+    #Create a list comprised of random elements, both for numbers and the crops
+    numList = []
+    cropList = []
+    for x in range (10):
+        number = random.randint(1,5)
+        numList.append(number)
+        cropList.append(cropDict[number])
+    #Choose a random year to check the crop rotation
+    year = random.randint(1,4)
+    cropList.append(year)
 
-    # 2) get player's result via stub
-    # We assume Player.olisort is implemented in player.py
-    player = Player((0, 0), 0, 0)  # dummy position and bounds
-    player_result: List[int] = player.olisort(data)
+    #Call the list of farms from a player made function called get_farms, passing in the list of plots and their crops
+    linked_crops = get_farms(cropList)
 
-    # 3) expected result
-    expected: List[int] = sorted(data)
+    #Update all of the crop values in the list
+    for crop in range (len(numList)):
+        numList[crop] = (numList[crop] + year)%5 + 1
+        cropList[crop] = cropDict[numList[crop]]
 
-    # 4) compare and return
-    passed: bool = player_result == expected
-    return passed, str(expected), str(player_result)
+    #verify a random crop
+    randCrop = random.randint(0,9)
+
+    if type(linked_crops) != Linked_list():
+        print("error, linked list not recieved")
+        return (False, None, cropList[randCrop])
+
+    #Verify the results
+    current = linked_crops.getNode(randCrop)
+    success = False
+    if current == cropList[randCrop]:
+        success == True
+
+    return (success, current, cropList[randCrop])
